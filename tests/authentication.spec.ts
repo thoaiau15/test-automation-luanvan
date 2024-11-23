@@ -1,5 +1,4 @@
 import { test, expect} from '@playwright/test';
-
 test.describe('AUTH - Authentication', async () => {
     const userInfo = {
         username: "admin",
@@ -22,10 +21,10 @@ test.describe('AUTH - Authentication', async () => {
         await page.close();
     });
     test('@AUTH_001 - Login Success', async ({ page }) => {
-        await test.step('Fill username, password', async () => {
+        await test.step('Điền thông tin', async () => {
             await page.locator(xpath.inputCompany).click();
             await page.waitForSelector('//span[text()="webERPDemo Company Ltd"]');
-            await page.locator('//span[text()="webERPDemo Company Ltd"]').click();
+            await page.locator('//span[text()="webERPDemo Company Ltd"]').nth(0).click();
             await page.locator(xpath.userLogin).fill(userInfo.username);
             await page.locator(xpath.userPass).fill(userInfo.password);
         })
@@ -33,11 +32,14 @@ test.describe('AUTH - Authentication', async () => {
             await page.locator(xpath.wpSubmit).click();
         })
         await test.step('Kiểm tra', async () => {
-             await expect(page).toHaveURL(/demo\/index.php/);
+            await expect(page).toHaveURL(/demo\/index.php/);
         })
     });
     test('@AUTH_002 - Login Fail', async ({ page }) => {
-        await test.step('Fill username, password', async () => {
+        await test.step('Điền thông tin', async () => {
+            await page.locator(xpath.inputCompany).click();
+            await page.waitForSelector('//span[text()="webERPDemo Company Ltd"]');
+            await page.locator('//span[text()="webERPDemo Company Ltd"]').nth(0).click();
             await page.locator(xpath.userLogin).fill(userInfo.username);
             await page.locator(xpath.userPass).fill(userInfo.passwordFail);
         })
@@ -50,7 +52,10 @@ test.describe('AUTH - Authentication', async () => {
         })
     });
     test('@AUTH_003 - Login Fail', async ({ page }) => {
-        await test.step('Fill username, password', async () => {
+        await test.step('Điền thông tin', async () => {
+            await page.locator(xpath.inputCompany).click();
+            await page.waitForSelector('//span[text()="webERPDemo Company Ltd"]');
+            await page.locator('//span[text()="webERPDemo Company Ltd"]').nth(0).click();
             await page.locator(xpath.userLogin).fill(userInfo.usernameFail);
             await page.locator(xpath.userPass).fill(userInfo.password);
         })
@@ -63,7 +68,10 @@ test.describe('AUTH - Authentication', async () => {
         })
     });
     test('@AUTH_004 - Login Fail', async ({ page }) => {
-        await test.step('Fill username, password', async () => {
+        await test.step('Điền thông tin', async () => {
+            await page.locator(xpath.inputCompany).click();
+            await page.waitForSelector('//span[text()="webERPDemo Company Ltd"]');
+            await page.locator('//span[text()="webERPDemo Company Ltd"]').nth(0).click();
             await page.locator(xpath.userLogin).fill(userInfo.usernameFail);
             await page.locator(xpath.userPass).fill(userInfo.passwordFail);
         })

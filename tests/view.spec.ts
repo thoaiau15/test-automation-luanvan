@@ -24,7 +24,7 @@ test.describe('VIEW - View Data', async () => {
             await page.waitForSelector('//span[text()="webERPDemo Company Ltd"]');
             
             // Nhấp vào tùy chọn cụ thể
-            await page.locator('//span[text()="webERPDemo Company Ltd"]').click();
+            await page.locator('//span[text()="webERPDemo Company Ltd"]').nth(0).click();
             await page.locator(xpathLogin.userLogin).fill(userInfo.username);
             await page.locator(xpathLogin.userPass).fill(userInfo.password);
         })

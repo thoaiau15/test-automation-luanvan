@@ -28,16 +28,38 @@ test.describe('DEL - Delete Module', async () => {
         boxMessageSucces: '//div[@class="Message success noPrint"]',
         boxMessageSuccessInfo: '//div[@class="Message info noPrint"]',
     }
+    const xpathSupplier = {
+        menubarPurchases: '//a[@href="index.php?Application=PO"]',
+        shipmentEntry: '//a[@href="/demo/SelectSupplier.php"]',
+        searchSupplier: '//input[@name="Search"]',
+        supplierID: '//input[@name="SupplierID"]',
+        suppName: '//input[@name="SuppName"]',
+        location1: '//input[@name="Address1"]',
+        location2: '//input[@name="Address2"]',
+        location3: '//input[@name="Address3"]',
+        location4: '//input[@name="Address4"]',
+        location5: '//input[@name="Address5"]',
+        location6: '//select[@name="Address6"]',
+        phone: '//input[@name="Phone"]',
+        fax: '//input[@name="Fax"]',
+        url: '//input[@name="URL"]',
+        supplierType: '//select[@name="SupplierType"]',
+        supplierSince: '//input[@name="SupplierSince"]',
+        btnSubmit: '//input[@name="submit"]',
+        boxMessageSuccess: '//div[@class="Message success noPrint"]',
+        boxMessageFail: '//div[@class="Message error noPrint"]',
+    }
     const dataAsset = {
-        selectValue: 8, // giá trị cụ thể cần chọn, thay bằng giá trị thực tế
+        selectValue: 12, // giá trị cụ thể cần chọn, thay bằng giá trị thực tế
     }
     test.beforeEach(async ({ page }) => {
+        page.on('dialog', dialog => dialog.accept());
         await page.goto("https://weberp.org/demo/index.php");
         await page.waitForSelector(xpathLogin.userLogin);
         await test.step('Fill username, password', async () => {
             await page.locator(xpathLogin.inputCompany).click();
             await page.waitForSelector('//span[text()="webERPDemo Company Ltd"]');
-            await page.locator('//span[text()="webERPDemo Company Ltd"]').click();
+            await page.locator('//span[text()="webERPDemo Company Ltd"]').nth(0).click();
             await page.locator(xpathLogin.userLogin).fill(userInfo.username);
             await page.locator(xpathLogin.userPass).fill(userInfo.password);
 
@@ -52,22 +74,35 @@ test.describe('DEL - Delete Module', async () => {
     test.afterEach(async ({ page }) => {
         await page.close();
     });
-    test('@DEL-001 - Edit Asset Success', async ({ page }) => {
+    test('@DEL-001 - Delete Asset Success', async ({ page }) => {
         await page.locator(xpathAssetEdit.menuAssetManager).click();
         await test.step('Chọn asset cần chỉnh sửa', async () =>{
             await page.locator(xpathAssetEdit.transactionsSelectAsset).click();
             await page.locator(xpathAssetEdit.assetBtnSearch).click();
         })
         await test.step('Xóa asset', async () =>{
-            page.on('dialog', dialog => dialog.accept());
-            await page.locator(`//input[@name="Select" and @value="${dataAsset.selectValue}"]`).click();
+            await page.locator(`//input[@name="Select"]`).nth(0).click();
             const assetCode = await page.locator('//label[text()="Asset Code:"]/following-sibling::fieldtext').innerText();
             await page.locator('//input[@name="delete"]').click();
             await page.waitForSelector(xpathAssetEdit.boxMessageSuccessInfo);
             await expect(page.locator(xpathAssetEdit.boxMessageSuccessInfo)).toHaveText(
-                new RegExp(`INFORMATION Message\\s*:\\s*Deleted the asset  record for asset number ${assetCode}`, 's'),
+                new RegExp(`INFORMATION Message\\s*:\\s*Deleted the asset record for asset number ${assetCode}`, 's'),
                 { timeout: 10000 }
               );
         })
     });
+    test('@DEL-002 - Delete Suppliers', async ({ page }) => {
+        await test.step('Chọn Add Supplier Menu Bar', async () => {
+            await page.locator(xpathSupplier.menubarPurchases).click();
+            await page.locator(xpathSupplier.shipmentEntry).click();
+            await page.locator(xpathSupplier.searchSupplier).click();
+            await page.waitForSelector('//form[@action="/demo/SelectSupplier.php"]');
+        })
+        await test.step('Xóa supplier', async() => {
+            await page.locator('//td[text()="ThoaiTest"]/preceding-sibling::td/input[@name="Select"]').nth(0).click();
+            await page.waitForSelector('//p[@class="page_title_text"]');
+            await page.locator('//td[@class="select"]/a').nth(14).click(); 
+            await page.locator('//input[@name="delete"]').click();
+        })
+    })
 })

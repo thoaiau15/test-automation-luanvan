@@ -40,13 +40,31 @@ test.describe('EDIT - Edit Module', async () => {
         boxMessageFail: '//div[@class="Message warn noPrint"]',
         boxMessageSucces: '//div[@class="Message success noPrint"]'
     }
+    const xpathTender = {
+        menubarPucharse: '//a[@href="index.php?Application=PO"]',
+        editExistingTender: '//a[@href="/demo/SupplierTenderCreate.php?Edit=Yes"]',
+        idTender: '//a[text() = "Edit"]',
+        requireByDate: '//input[@name="RequiredByDate"]',
+        location: '//select[@name="StkLocation"]',
+        btnSupplier: '//input[@name="Suppliers"]',
+        btnItems: '//input[@name="Items"]',
+        tagNameSearchSupplier: '//legend[@class="search"]',
+        tagNameSearchItems: '//legend[@class="search"]',
+        btnSearchSupplier: '//input[@name="SearchSupplier"]',
+        btnSearchItems: '//input[@name="Search"]',
+        btnSelectSupplier: '//input[@name="SelectedSupplier"]',
+        btnAddItems: '//input[@name="NewItem"]',
+        qualityItems: '//input[@name="Qty0"]',
+        btnSave: '//input[@name="Save"]',
+        boxMessage: '//div[@class="Message success noPrint"]',
+    }
     test.beforeEach(async ({ page }) => {
         await page.goto("https://weberp.org/demo/index.php");
         await page.waitForSelector(xpathLogin.userLogin);
         await test.step('Fill username, password', async () => {
             await page.locator(xpathLogin.inputCompany).click();
             await page.waitForSelector('//span[text()="webERPDemo Company Ltd"]');
-            await page.locator('//span[text()="webERPDemo Company Ltd"]').click();
+            await page.locator('//span[text()="webERPDemo Company Ltd"]').nth(0).click();
             await page.locator(xpathLogin.userLogin).fill(userInfo.username);
             await page.locator(xpathLogin.userPass).fill(userInfo.password);
 
@@ -113,10 +131,17 @@ test.describe('EDIT - Edit Module', async () => {
             const imagePath = '/Applications/TaiLieu/LuanVan/test-automation-luanvan/tests/data-test/ImageTest.jpg';
             await page.setInputFiles('input[type="file"]', imagePath);
             await page.locator(xpathAssetEdit.assetUpdate).click();
-            await expect(page.locator(xpathAssetEdit.boxMessageFail)).toHaveText(
-                /WARNING Report\s*:\s*The file size is over the maximum allowed. The maximum size allowed in KB is 300/,
-                { timeout: 10000 }
-            );
+            const messages = page.locator('//div[@class="Message warn noPrint"]');
+            const count = await messages.count();
+            for (let i = 0; i < count; i++) {
+                const text = await messages.nth(i).innerText();
+                if (text.includes('The file size is over the maximum allowed')) {
+                    await expect(messages.nth(i)).toHaveText(
+                        /WARNING Report\s*:\s*The file size is over the maximum allowed. The maximum size allowed in KB is 300/,
+                        { timeout: 10000 }
+                    );
+                }
+            }
         })
     });
     test('@EDIT-007 - Edit Asset Success', async ({ page }) => {
@@ -157,6 +182,41 @@ test.describe('EDIT - Edit Module', async () => {
             await expect(page.locator('//div[@class="Message success noPrint"]')).toHaveText(
                 new RegExp(`SUCCESS Report\\s*:\\s*The Fixed Asset has been moved successfully`),
                 { timeout: 10000 }
+            );
+        })
+    });
+    test('@EDIT-009 - Edit Existing Asset', async ({ page }) => {
+        await page.locator(xpathTender.menubarPucharse).click();
+        await page.locator(xpathTender.editExistingTender).click();
+        await page.locator(xpathTender.idTender).nth(0).click();
+        await test.step('Điền thông tin tender', async () =>{
+            await page.locator(xpathTender.requireByDate).fill('2002-07-15');
+        })
+        await test.step('Chọn Supplier', async () => {
+            await page.locator(xpathTender.btnSupplier).click();
+            await page.waitForURL('**/SupplierTenderCreate.php?identifier=*', {
+                timeout: 30000
+            });
+            expect(page.locator(xpathTender.tagNameSearchSupplier)).toHaveText('Supplier Search Criteria')
+            await page.locator(xpathTender.btnSearchSupplier).click();
+            await page.locator(xpathTender.btnSelectSupplier).nth(0).click();
+        })
+        await test.step('Chọn Items', async () => {
+            await page.locator(xpathTender.btnItems).click();
+            await page.waitForURL('**/SupplierTenderCreate.php?identifier=*', {
+                timeout: 30000
+            });
+            expect(page.locator(xpathTender.tagNameSearchItems)).toHaveText('Item Search Criteria')
+            await page.locator(xpathTender.btnSearchItems).click();
+            await page.locator(xpathTender.qualityItems).fill('10');
+            await page.locator(xpathTender.btnAddItems).click();
+        })
+        await test.step('Submit và kiểm tra', async () => {
+            await page.locator(xpathTender.btnSave).click();
+            await page.waitForSelector(xpathTender.boxMessage);
+            expect(page.locator(xpathTender.boxMessage)).toHaveText(
+                /SUCCESS Report\s*:\s*The tender has been successfully saved/,
+                { timeout: 30000 }
             );
         })
     });

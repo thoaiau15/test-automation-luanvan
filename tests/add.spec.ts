@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-
 test.describe('ADD - Add Module', async () => {
     const userInfo = {
         username: "admin",
@@ -27,8 +26,12 @@ test.describe('ADD - Add Module', async () => {
         btnInsert: '//input[@value="Insert New Fixed Asset"]',
         boxMessage: '//div[@class="Message success noPrint"]',
     }
+    function generateRandomSupplierID() {
+        // Tạo chuỗi ngẫu nhiên gồm 7 chữ số
+        return Math.floor(1000000 + Math.random() * 9000000).toString();
+    }
     const dataSupplier = {
-        SupplierID: '123456',
+        SupplierID: generateRandomSupplierID(),
         suppName: 'ThoaiTest',
         location1: 'Location1',
         location2: 'Location2',
@@ -93,7 +96,7 @@ test.describe('ADD - Add Module', async () => {
             // Chờ cho các tùy chọn xuất hiện
             await page.waitForSelector('//span[text()="webERPDemo Company Ltd"]');
             // Nhấp vào tùy chọn cụ thể
-            await page.locator('//span[text()="webERPDemo Company Ltd"]').click();
+            await page.locator('//span[text()="webERPDemo Company Ltd"]').nth(0).click();
             await page.locator(xpathLogin.userLogin).fill(userInfo.username);
             await page.locator(xpathLogin.userPass).fill(userInfo.password);
         })
