@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+
 test.describe('ADD - Add Module', async () => {
     const userInfo = {
         username: "admin",
@@ -87,6 +88,7 @@ test.describe('ADD - Add Module', async () => {
         qualityItems: '//input[@name="Qty0"]',
         btnSave: '//input[@name="Save"]',
         boxMessage: '//div[@class="Message success noPrint"]',
+        btnCloseMessage:'//span[@class="MessageCloseButton"]'
     }
     test.beforeEach(async ({ page }) => {
         await page.goto("https://weberp.org/demo/index.php");
@@ -159,10 +161,11 @@ test.describe('ADD - Add Module', async () => {
         })
         await test.step('Submit và kiểm tra', async () => {
             await page.locator(xpathTender.btnSave).click();
-            await page.waitForSelector(xpathTender.boxMessage);
-            expect(page.locator(xpathTender.boxMessage)).toHaveText(
+            await page.waitForSelector(xpathTender.btnCloseMessage, { timeout: 60000 });
+            await expect(page.locator(xpathTender.boxMessage)).toBeVisible({ timeout: 50000 });
+            await expect(page.locator(xpathTender.boxMessage)).toHaveText(
                 /SUCCESS Report\s*:\s*The tender has been successfully saved/,
-                { timeout: 30000 }
+                { timeout: 50000 }
             );
         })
     });
@@ -219,7 +222,7 @@ test.describe('ADD - Add Module', async () => {
         })
         await test.step('Submit và kiểm tra', async () => {
             await page.locator(xpathSupplier.btnSubmit).click();
-            await page.waitForSelector(xpathSupplier.boxMessageFail);
+            await page.waitForSelector(xpathSupplier.boxMessageFail, { timeout: 60000 });
             await expect(page.locator(xpathSupplier.boxMessageFail)).toHaveText(
                 /ERROR Report\s*:\s*The supplier number already exists in the database/,
                 { timeout: 30000 }

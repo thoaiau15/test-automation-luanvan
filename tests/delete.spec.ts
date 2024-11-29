@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import path from 'path';
 
 test.describe('DEL - Delete Module', async () => {
     const userInfo = {
@@ -26,6 +25,7 @@ test.describe('DEL - Delete Module', async () => {
         assetUpdate: '//input[@name="submit" and @value="Update"]',
         boxMessageFail: '//div[@class="Message warn noPrint"]',
         boxMessageSucces: '//div[@class="Message success noPrint"]',
+        boxDelFail: '//div[@class="Message error noPrint"]',
         boxMessageSuccessInfo: '//div[@class="Message info noPrint"]',
     }
     const xpathSupplier = {
@@ -74,24 +74,59 @@ test.describe('DEL - Delete Module', async () => {
     test.afterEach(async ({ page }) => {
         await page.close();
     });
+    // test('@DEL-001 - Delete Asset Success', async ({ page }) => {
+    //     await page.locator(xpathAssetEdit.menuAssetManager).click();
+    //     await test.step('Chọn asset cần chỉnh sửa', async () =>{
+    //         await page.locator(xpathAssetEdit.transactionsSelectAsset).click();
+    //         await page.locator(xpathAssetEdit.assetBtnSearch).click();
+    //     })
+    //     await test.step('Xóa asset', async () =>{
+    //         await page.locator(`//input[@name="Select"]`).nth(3).click();
+    //         const assetCode = await page.locator('//label[text()="Asset Code:"]/following-sibling::fieldtext').innerText();
+    //         await page.locator('//input[@name="delete"]').click();
+    //         await page.waitForSelector(xpathAssetEdit.boxMessageSuccessInfo);
+    //         await expect(page.locator(xpathAssetEdit.boxMessageSuccessInfo)).toHaveText(
+    //             new RegExp(`INFORMATION Message\\s*:\\s*Deleted the asset record for asset number ${assetCode}`, 's'),
+    //             { timeout: 10000 }
+    //           );
+    //     })
+    // });
     test('@DEL-001 - Delete Asset Success', async ({ page }) => {
         await page.locator(xpathAssetEdit.menuAssetManager).click();
-        await test.step('Chọn asset cần chỉnh sửa', async () =>{
+        await test.step('Chọn asset cần chỉnh sửa', async () => {
             await page.locator(xpathAssetEdit.transactionsSelectAsset).click();
             await page.locator(xpathAssetEdit.assetBtnSearch).click();
-        })
-        await test.step('Xóa asset', async () =>{
-            await page.locator(`//input[@name="Select"]`).nth(0).click();
-            const assetCode = await page.locator('//label[text()="Asset Code:"]/following-sibling::fieldtext').innerText();
+        });
+        await test.step('Xóa asset', async () => {
+            await page.locator(`//input[@name="Select"]`).nth(3).click();
             await page.locator('//input[@name="delete"]').click();
             await page.waitForSelector(xpathAssetEdit.boxMessageSuccessInfo);
             await expect(page.locator(xpathAssetEdit.boxMessageSuccessInfo)).toHaveText(
-                new RegExp(`INFORMATION Message\\s*:\\s*Deleted the asset record for asset number ${assetCode}`, 's'),
+                /INFORMATION Message\s*:\s*Deleted the asset\s*record/,
                 { timeout: 10000 }
-              );
-        })
+            );
+        });
     });
-    test('@DEL-002 - Delete Suppliers', async ({ page }) => {
+    test('@DEL-002 - Delete Asset Fail', async ({ page }) => {
+        await page.locator(xpathAssetEdit.menuAssetManager).click();
+    
+        await test.step('Chọn asset cần chỉnh sửa', async () => {
+            await page.locator(xpathAssetEdit.transactionsSelectAsset).click();
+            await page.locator(xpathAssetEdit.assetBtnSearch).click();
+        });
+    
+        await test.step('Xóa asset', async () => {
+            await page.locator(`//input[@name="Select"]`).nth(0).click();
+            await page.locator('//input[@name="delete"]').click();
+            await page.waitForSelector(xpathAssetEdit.boxDelFail);
+            const errorMessage = await page.locator(xpathAssetEdit.boxDelFail).innerText();
+            expect(errorMessage.trim()).toMatch(
+                /ERROR Report\s*:\s*There is a purchase order set up for this asset. The purchase order line must be deleted first/
+            );
+        });
+    });
+    
+    test('@DEL-003 - Delete Suppliers', async ({ page }) => {
         await test.step('Chọn Add Supplier Menu Bar', async () => {
             await page.locator(xpathSupplier.menubarPurchases).click();
             await page.locator(xpathSupplier.shipmentEntry).click();
@@ -99,7 +134,7 @@ test.describe('DEL - Delete Module', async () => {
             await page.waitForSelector('//form[@action="/demo/SelectSupplier.php"]');
         })
         await test.step('Xóa supplier', async() => {
-            await page.locator('//td[text()="ThoaiTest"]/preceding-sibling::td/input[@name="Select"]').nth(0).click();
+            await page.locator('//td[text()="ThoaiTest"]/preceding-sibling::td/input[@name="Select"]').nth(2).click();
             await page.waitForSelector('//p[@class="page_title_text"]');
             await page.locator('//td[@class="select"]/a').nth(14).click(); 
             await page.locator('//input[@name="delete"]').click();

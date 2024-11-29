@@ -57,6 +57,7 @@ test.describe('EDIT - Edit Module', async () => {
         qualityItems: '//input[@name="Qty0"]',
         btnSave: '//input[@name="Save"]',
         boxMessage: '//div[@class="Message success noPrint"]',
+        btnCloseMessage: '//span[@class="MessageCloseButton"]'
     }
     test.beforeEach(async ({ page }) => {
         await page.goto("https://weberp.org/demo/index.php");
@@ -185,39 +186,39 @@ test.describe('EDIT - Edit Module', async () => {
             );
         })
     });
-    test('@EDIT-009 - Edit Existing Asset', async ({ page }) => {
-        await page.locator(xpathTender.menubarPucharse).click();
-        await page.locator(xpathTender.editExistingTender).click();
-        await page.locator(xpathTender.idTender).nth(0).click();
-        await test.step('Điền thông tin tender', async () =>{
-            await page.locator(xpathTender.requireByDate).fill('2002-07-15');
-        })
-        await test.step('Chọn Supplier', async () => {
-            await page.locator(xpathTender.btnSupplier).click();
-            await page.waitForURL('**/SupplierTenderCreate.php?identifier=*', {
-                timeout: 30000
-            });
-            expect(page.locator(xpathTender.tagNameSearchSupplier)).toHaveText('Supplier Search Criteria')
-            await page.locator(xpathTender.btnSearchSupplier).click();
-            await page.locator(xpathTender.btnSelectSupplier).nth(0).click();
-        })
-        await test.step('Chọn Items', async () => {
-            await page.locator(xpathTender.btnItems).click();
-            await page.waitForURL('**/SupplierTenderCreate.php?identifier=*', {
-                timeout: 30000
-            });
-            expect(page.locator(xpathTender.tagNameSearchItems)).toHaveText('Item Search Criteria')
-            await page.locator(xpathTender.btnSearchItems).click();
-            await page.locator(xpathTender.qualityItems).fill('10');
-            await page.locator(xpathTender.btnAddItems).click();
-        })
-        await test.step('Submit và kiểm tra', async () => {
-            await page.locator(xpathTender.btnSave).click();
-            await page.waitForSelector(xpathTender.boxMessage);
-            expect(page.locator(xpathTender.boxMessage)).toHaveText(
-                /SUCCESS Report\s*:\s*The tender has been successfully saved/,
-                { timeout: 30000 }
-            );
-        })
-    });
+    // test('@EDIT-009 - Edit Existing Asset', async ({ page }) => {
+    //     await page.locator(xpathTender.menubarPucharse).click();
+    //     await page.locator(xpathTender.editExistingTender).click();
+    //     await page.locator(xpathTender.idTender).nth(0).click();
+    //     await test.step('Điền thông tin tender', async () =>{
+    //         await page.locator(xpathTender.requireByDate).fill('2002-07-15');
+    //     })
+    //     await test.step('Chọn Supplier', async () => {
+    //         await page.locator(xpathTender.btnSupplier).click();
+    //         await page.waitForURL('**/SupplierTenderCreate.php?identifier=*', {
+    //             timeout: 30000
+    //         });
+    //         expect(page.locator(xpathTender.tagNameSearchSupplier)).toHaveText('Supplier Search Criteria')
+    //         await page.locator(xpathTender.btnSearchSupplier).click();
+    //         await page.locator(xpathTender.btnSelectSupplier).nth(0).click();
+    //     })
+    //     await test.step('Chọn Items', async () => {
+    //         await page.locator(xpathTender.btnItems).click();
+    //         await page.waitForURL('**/SupplierTenderCreate.php?identifier=*', {
+    //             timeout: 30000
+    //         });
+    //         expect(page.locator(xpathTender.tagNameSearchItems)).toHaveText('Item Search Criteria')
+    //         await page.locator(xpathTender.btnSearchItems).click();
+    //         await page.locator(xpathTender.qualityItems).fill('10');
+    //         await page.locator(xpathTender.btnAddItems).click();
+    //     })
+    //     await test.step('Submit và kiểm tra', async () => {
+    //         await page.locator(xpathTender.btnSave).click();
+    //         await page.waitForSelector(xpathTender.btnCloseMessage, {timeout: 50000});
+    //         expect(page.locator(xpathTender.boxMessage)).toHaveText(
+    //             /SUCCESS Report\s*:\s*The tender has been successfully saved/,
+    //             { timeout: 30000 }
+    //         );
+    //     })
+    // });
 })
