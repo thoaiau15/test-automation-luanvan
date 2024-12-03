@@ -129,7 +129,7 @@ test.describe('EDIT - Edit Module', async () => {
         })
         await test.step('Chỉnh sửa asset', async () =>{
             await page.locator(xpathAssetEdit.assetCode).click();
-            const imagePath = '/Applications/TaiLieu/LuanVan/test-automation-luanvan/tests/data-test/ImageTest.jpg';
+            const imagePath = './tests/data-test/ImageTest.jpg';
             await page.setInputFiles('input[type="file"]', imagePath);
             await page.locator(xpathAssetEdit.assetUpdate).click();
             const messages = page.locator('//div[@class="Message warn noPrint"]');
@@ -158,7 +158,7 @@ test.describe('EDIT - Edit Module', async () => {
         await test.step('Chỉnh sửa asset', async () =>{
             await page.locator(xpathAssetEdit.assetCode).click();
             const assetCode = await page.locator('//label[text()="Asset Code:"]/following-sibling::fieldtext').innerText();
-            const imagePath = '/Applications/TaiLieu/LuanVan/test-automation-luanvan/tests/data-test/ImageTest2.jpg';
+            const imagePath = './tests/data-test/ImageTest2.jpg';
             await page.setInputFiles('input[type="file"]', imagePath);
             await page.locator(xpathAssetEdit.assetUpdate).click({timeout: 10000});
             await expect(page.locator(xpathAssetEdit.boxMessageSucces)).toHaveText(

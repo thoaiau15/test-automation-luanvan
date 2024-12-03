@@ -11,15 +11,17 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                 node-version: lts/*
+
             - name: Install dependencies 
               run: npm ci
+
             - name: Install Playwright Browsers 
               run: npx playwright install --with-deps
+
             # Run Playwright tests in headless mode with xvfb (nếu cần chế độ GUI)
             - name: Run Playwright Tests
-              run: xvfb-run --auto-servernum -- npx playwright test --workers=1
-                # Hoặc nếu không dùng GUI, thì chạy trực tiếp:
-                # run: npx playwright test --workers=1 --headless
+              run: npx playwright test --workers=1 --headless
+
             - uses: actions/upload-artifact@v4 
               if: ${{ !cancelled() }}
               with:
