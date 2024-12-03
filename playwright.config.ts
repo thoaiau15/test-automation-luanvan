@@ -32,7 +32,9 @@ export default defineConfig({
     trace: 'on',
     headless: false,
     browserName: "chromium",
-    
+    launchOptions: {
+      slowMo: 100, // Làm chậm 50ms mỗi bước
+    },    
   },
   expect: {
     timeout: 100000, 

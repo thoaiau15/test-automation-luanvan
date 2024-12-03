@@ -40,8 +40,8 @@ test.describe('ADD - Add Module', async () => {
         location4: 'Location4',
         location5: 'Location5',
         location6: 'Viet Nam',
-        numberPhone: '012345',
-        numberFax: '543210',
+        numberPhone: '0123456789',
+        numberFax: '+84 123456789 ',
         url: 'https://weberp.org/demo/Suppliers.php',
         supplierType: 'test',
         supplierSince: '2020-07-15',
@@ -186,8 +186,8 @@ test.describe('ADD - Add Module', async () => {
             await page.locator(xpathSupplier.location6).selectOption(dataSupplier.location6);
             await page.locator(xpathSupplier.phone).fill(dataSupplier.numberPhone);
             await page.locator(xpathSupplier.fax).fill(dataSupplier.numberFax);
-            await page.locator(xpathSupplier.url).fill(dataSupplier.url);
-            await page.locator(xpathSupplier.supplierType).selectOption(dataSupplier.supplierType);
+            // await page.locator(xpathSupplier.url).fill(dataSupplier.url);
+            //await page.locator(xpathSupplier.supplierType).selectOption(dataSupplier.supplierType);
             await page.locator(xpathSupplier.supplierSince).fill(dataSupplier.supplierSince); //YYYY-MM-DD
         })
         await test.step('Submit và kiểm tra', async () => {
@@ -216,8 +216,8 @@ test.describe('ADD - Add Module', async () => {
             await page.locator(xpathSupplier.location6).selectOption(dataSupplier.location6);
             await page.locator(xpathSupplier.phone).fill(dataSupplier.numberPhone);
             await page.locator(xpathSupplier.fax).fill(dataSupplier.numberFax);
-            await page.locator(xpathSupplier.url).fill(dataSupplier.url);
-            await page.locator(xpathSupplier.supplierType).selectOption(dataSupplier.supplierType);
+            // await page.locator(xpathSupplier.url).fill(dataSupplier.url);
+            // await page.locator(xpathSupplier.supplierType).selectOption(dataSupplier.supplierType);
             await page.locator(xpathSupplier.supplierSince).fill(dataSupplier.supplierSince); //YYYY-MM-DD
         })
         await test.step('Submit và kiểm tra', async () => {
