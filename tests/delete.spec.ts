@@ -74,23 +74,6 @@ test.describe('DEL - Delete Module', async () => {
     test.afterEach(async ({ page }) => {
         await page.close();
     });
-    // test('@DEL-001 - Delete Asset Success', async ({ page }) => {
-    //     await page.locator(xpathAssetEdit.menuAssetManager).click();
-    //     await test.step('Chọn asset cần chỉnh sửa', async () =>{
-    //         await page.locator(xpathAssetEdit.transactionsSelectAsset).click();
-    //         await page.locator(xpathAssetEdit.assetBtnSearch).click();
-    //     })
-    //     await test.step('Xóa asset', async () =>{
-    //         await page.locator(`//input[@name="Select"]`).nth(3).click();
-    //         const assetCode = await page.locator('//label[text()="Asset Code:"]/following-sibling::fieldtext').innerText();
-    //         await page.locator('//input[@name="delete"]').click();
-    //         await page.waitForSelector(xpathAssetEdit.boxMessageSuccessInfo);
-    //         await expect(page.locator(xpathAssetEdit.boxMessageSuccessInfo)).toHaveText(
-    //             new RegExp(`INFORMATION Message\\s*:\\s*Deleted the asset record for asset number ${assetCode}`, 's'),
-    //             { timeout: 10000 }
-    //           );
-    //     })
-    // });
     test('@DEL-001 - Delete Asset Success', async ({ page }) => {
         await page.locator(xpathAssetEdit.menuAssetManager).click();
         await test.step('Chọn asset cần chỉnh sửa', async () => {
@@ -125,7 +108,6 @@ test.describe('DEL - Delete Module', async () => {
             );
         });
     });
-    
     test('@DEL-003 - Delete Suppliers', async ({ page }) => {
         await test.step('Chọn Add Supplier Menu Bar', async () => {
             await page.locator(xpathSupplier.menubarPurchases).click();
@@ -139,5 +121,5 @@ test.describe('DEL - Delete Module', async () => {
             await page.locator('//td[@class="select"]/a').nth(14).click(); 
             await page.locator('//input[@name="delete"]').click();
         })
-    })
+    });
 })
