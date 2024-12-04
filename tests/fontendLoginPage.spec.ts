@@ -47,4 +47,5 @@ test.describe('Fontend Login Page Test', async () => {
         await page.click(xpathLogin.btnEys);
         await expect(page.locator(xpathLogin.userPass)).toHaveAttribute('type', 'text');
     });
+    
 })
