@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { title } from 'process';
 
 test.describe('Favouries Bar', async () => {
     const userInfo = {
