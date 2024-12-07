@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { title } from 'process';
 
 test.describe('Header Bar', async () => {
     const userInfo = {
@@ -42,8 +41,8 @@ test.describe('Header Bar', async () => {
     }
     const xpathTheme = {
         theme: '//select[@name="Theme"]',
-        themSilver: "//link[@href='/demo/css/silverwolf/styles.css?v=30']",
-        themWeb: '//link[@href="/demo/css/WEBootstrap/styles.css?v=30"]',
+        themSilver: '//link[@href="/demo/css/silverwolf/styles.css?version=1.0"]',
+        themWeb: '//link[@href="/demo/css/WEBootstrap/styles.css?version=1.0"]',
     }
     test.beforeEach(async ({ page }) => {
         await page.goto("https://weberp.org/demo/index.php");
@@ -108,13 +107,13 @@ test.describe('Header Bar', async () => {
         await page.locator(xpathTheme.theme).selectOption({ value: "silverwolf" });
         await page.waitForTimeout(1000); 
         const link = page.locator(xpathTheme.themSilver);
-        await expect(link).toHaveAttribute('href', '/demo/css/silverwolf/styles.css?v=30');
+        await expect(link).toHaveAttribute('href', "/demo/css/silverwolf/styles.css?version=1.0");
     });
     test('Select Theme WEBootstrap', async ({ page }) => {
         await page.waitForLoadState('load');
         await page.locator(xpathTheme.theme).selectOption({ value: "WEBootstrap" });
         await page.waitForTimeout(1000); 
         const link = page.locator(xpathTheme.themWeb);
-        await expect(link).toHaveAttribute('href', '/demo/css/WEBootstrap/styles.css?v=30');
+        await expect(link).toHaveAttribute('href', "/demo/css/WEBootstrap/styles.css?version=1.0");
     });
 })
