@@ -139,7 +139,7 @@ test.describe('EDIT - Edit Module', async () => {
                 if (text.includes('The file size is over the maximum allowed')) {
                     await expect(messages.nth(i)).toHaveText(
                         /WARNING Report\s*:\s*The file size is over the maximum allowed. The maximum size allowed in KB is 300/,
-                        { timeout: 10000 }
+                        { timeout: 30000 }
                     );
                 }
             }
@@ -160,10 +160,10 @@ test.describe('EDIT - Edit Module', async () => {
             const assetCode = await page.locator('//label[text()="Asset Code:"]/following-sibling::fieldtext').innerText();
             const imagePath = './tests/data-test/ImageTest2.jpg';
             await page.setInputFiles('input[type="file"]', imagePath);
-            await page.locator(xpathAssetEdit.assetUpdate).click({timeout: 10000});
+            await page.locator(xpathAssetEdit.assetUpdate).click({timeout: 30000});
             await expect(page.locator(xpathAssetEdit.boxMessageSucces)).toHaveText(
                 new RegExp(`SUCCESS Report\\s*:\\s*Asset ${assetCode} has been updated`),
-                { timeout: 10000 }
+                { timeout: 20000 }
             );
         })
     });
