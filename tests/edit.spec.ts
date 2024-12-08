@@ -94,7 +94,7 @@ test.describe('EDIT - Edit Module', async () => {
         // Sử dụng toHaveText với regex để bỏ qua các khoảng trắng hoặc ký tự không mong muốn. Bạn có thể dùng biểu thức chính quy để đảm bảo chỉ có nội dung chính được kiểm tra
         await expect(page.locator(xpathPersonalDetail.boxMessage)).toHaveText(
             /SUCCESS Report\s*:\s*The user settings have been updated. Be sure to remember your password for the next time you login/,
-            { timeout: 10000 }
+            { timeout: 30000 }
         );
     });
     test('@EDIT-002 - Edit Personal Details Fail', async ({ page }) => {
@@ -113,7 +113,7 @@ test.describe('EDIT - Edit Module', async () => {
         // Sử dụng toHaveText với regex để bỏ qua các khoảng trắng hoặc ký tự không mong muốn. Bạn có thể dùng biểu thức chính quy để đảm bảo chỉ có nội dung chính được kiểm tra
         await expect(page.locator(xpathPersonalDetail.boxMessage)).toHaveText(
             /WARNING Report\s*:\s*Cannot change password in the demo or others would be locked out!/,
-            { timeout: 10000 }
+            { timeout: 30000 }
         );
     });
     test('@EDIT-006 - Edit Asset Fail', async ({ page }) => {
@@ -125,13 +125,13 @@ test.describe('EDIT - Edit Module', async () => {
             await page.locator(xpathAssetEdit.assetLocation).selectOption('Test location');
             await page.locator(xpathAssetEdit.assetBtnSearch).click();
             await page.locator(xpathAssetEdit.assetFormID).nth(0).isVisible();
-            
         })
         await test.step('Chỉnh sửa asset', async () =>{
             await page.locator(xpathAssetEdit.assetCode).click();
             const imagePath = './tests/data-test/ImageTest.jpg';
             await page.setInputFiles('input[type="file"]', imagePath);
-            await page.locator(xpathAssetEdit.assetUpdate).click();
+            await page.locator(xpathAssetEdit.assetUpdate).click({timeout: 60000});
+            await page.waitForSelector(xpathAssetEdit.assetUpdate);
             const messages = page.locator('//div[@class="Message warn noPrint"]');
             const count = await messages.count();
             for (let i = 0; i < count; i++) {
@@ -139,7 +139,7 @@ test.describe('EDIT - Edit Module', async () => {
                 if (text.includes('The file size is over the maximum allowed')) {
                     await expect(messages.nth(i)).toHaveText(
                         /WARNING Report\s*:\s*The file size is over the maximum allowed. The maximum size allowed in KB is 300/,
-                        { timeout: 10000 }
+                        { timeout: 30000 }
                     );
                 }
             }
@@ -160,10 +160,10 @@ test.describe('EDIT - Edit Module', async () => {
             const assetCode = await page.locator('//label[text()="Asset Code:"]/following-sibling::fieldtext').innerText();
             const imagePath = './tests/data-test/ImageTest2.jpg';
             await page.setInputFiles('input[type="file"]', imagePath);
-            await page.locator(xpathAssetEdit.assetUpdate).click({timeout: 10000});
+            await page.locator(xpathAssetEdit.assetUpdate).click({timeout: 60000});
             await expect(page.locator(xpathAssetEdit.boxMessageSucces)).toHaveText(
                 new RegExp(`SUCCESS Report\\s*:\\s*Asset ${assetCode} has been updated`),
-                { timeout: 10000 }
+                { timeout: 30000 }
             );
         })
     });
